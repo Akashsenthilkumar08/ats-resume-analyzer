@@ -14,6 +14,7 @@ export function AppProvider({ children }) {
   const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   // Sync theme to html element
   useEffect(() => {
@@ -63,6 +64,8 @@ export function AppProvider({ children }) {
     setNotifOpen,
     profileOpen,
     setProfileOpen,
+    isSubscribed,
+    setIsSubscribed,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

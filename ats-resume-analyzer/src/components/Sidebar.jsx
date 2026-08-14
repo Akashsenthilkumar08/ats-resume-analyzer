@@ -1,7 +1,7 @@
 import {
   LayoutGrid, ScanLine, FileText, Briefcase,
   Sparkles, Tags, PenLine, MessageSquare,
-  Activity, Settings, X, ChevronRight, Zap,
+  Activity, Settings, X, ChevronRight, Zap, Lock,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { NAV_ITEMS } from "../data/mockData";
@@ -12,10 +12,21 @@ const ICONS = {
   Activity, Settings,
 };
 
+const LOCKED_PAGES = ["optimizer", "tracker"];
+
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen, activePage, setActivePage, setUpgradeModalOpen } = useApp();
+  const {
+    sidebarOpen, setSidebarOpen,
+    activePage, setActivePage,
+    setUpgradeModalOpen, isSubscribed,
+  } = useApp();
 
   function handleNav(id) {
+    if (LOCKED_PAGES.includes(id) && !isSubscribed) {
+      setUpgradeModalOpen(true);
+      setSidebarOpen(false);
+      return;
+    }
     setActivePage(id);
     setSidebarOpen(false);
   }
@@ -67,6 +78,7 @@ export default function Sidebar() {
                 {section.links.map((link) => {
                   const Icon = ICONS[link.icon];
                   const isActive = activePage === link.id;
+                  const isLocked = LOCKED_PAGES.includes(link.id) && !isSubscribed;
                   return (
                     <li key={link.id}>
                       <button
@@ -77,11 +89,19 @@ export default function Sidebar() {
                           {Icon && <Icon size={17} />}
                         </span>
                         <span className="nav-label">{link.label}</span>
-                        {link.badge && (
-                          <span className="nav-badge">{link.badge}</span>
-                        )}
-                        {link.count != null && (
-                          <span className="nav-count">{link.count}</span>
+                        {isLocked ? (
+                          <span className="nav-badge" style={{ background: "rgba(239,68,68,0.15)", color: "#ef4444" }}>
+                            <Lock size={11} style={{ marginRight: 3, verticalAlign: "middle" }} /> Locked
+                          </span>
+                        ) : (
+                          <>
+                            {link.badge && (
+                              <span className="nav-badge">{link.badge}</span>
+                            )}
+                            {link.count != null && (
+                              <span className="nav-count">{link.count}</span>
+                            )}
+                          </>
                         )}
                       </button>
                     </li>
@@ -99,14 +119,14 @@ export default function Sidebar() {
               <Zap size={18} />
             </div>
             <div className="upgrade-text">
-              <strong>Upgrade to Pro</strong>
-              <span>Unlimited scans & AI features</span>
+              <strong>{isSubscribed ? "Pro Plan Active" : "Upgrade to Pro"}</strong>
+              <span>{isSubscribed ? "All features unlocked!" : "Unlock Optimizer & Tracker"}</span>
             </div>
             <button
               className="upgrade-btn"
               onClick={() => setUpgradeModalOpen(true)}
             >
-              Upgrade
+              {isSubscribed ? "Manage" : "Upgrade"}
             </button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Activity, Plus, Trash2, ExternalLink, ChevronDown } from "lucide-react";
+import { Activity, Plus, Trash2, ExternalLink, ChevronDown, Lock, QrCode } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 
 const STATUS_OPTIONS = ["Applied", "Phone Screen", "Interview", "Offer", "Rejected", "Withdrawn"];
@@ -21,7 +21,7 @@ const DEMO_APPS = [
 ];
 
 export default function TrackerPage() {
-  const { addToast } = useApp();
+  const { addToast, isSubscribed, setUpgradeModalOpen } = useApp();
   const [apps, setApps] = useState(DEMO_APPS);
   const [filter, setFilter] = useState("All");
   const [showAdd, setShowAdd] = useState(false);
@@ -48,6 +48,34 @@ export default function TrackerPage() {
     addToast({ title: "Added!", message: `${newApp.company} application tracked.`, type: "success" });
   }
 
+  if (!isSubscribed) {
+    return (
+      <main className="content page-fade">
+        <div className="page-header">
+          <div>
+            <h2 className="page-title">Application Tracker 🔒</h2>
+            <p className="page-subtitle">Track all your job applications in one place.</p>
+          </div>
+        </div>
+
+        <div className="card locked-card-container">
+          <div className="locked-badge">
+            <Lock size={32} style={{ color: "#ef4444" }} />
+          </div>
+          <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: 8 }}>
+            Application Tracker is Locked
+          </h3>
+          <p style={{ color: "var(--text-secondary)", maxWidth: "460px", margin: "0 auto 24px", lineHeight: 1.6 }}>
+            Subscribe to Classic (₹1,650/mo), Pro (₹8,250/mo), or Enterprise (₹16,500/mo) to unlock application status tracking, interview pipeline analytics, and custom notes.
+          </p>
+          <button className="btn btn-primary btn-lg" onClick={() => setUpgradeModalOpen(true)}>
+            <QrCode size={18} /> Unlock &amp; Pay via PhonePe QR
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="content page-fade">
       <div className="page-header">
@@ -60,7 +88,6 @@ export default function TrackerPage() {
         </button>
       </div>
 
-      {/* Kanban-style status summary */}
       <div className="tracker-summary">
         {["All", ...STATUS_OPTIONS].map(s => (
           <button key={s} className={"tracker-chip" + (filter === s ? " active" : "")}
@@ -71,7 +98,6 @@ export default function TrackerPage() {
         ))}
       </div>
 
-      {/* Add form */}
       {showAdd && (
         <div className="card" style={{ marginBottom: 20 }}>
           <h3 className="card-title">New Application</h3>
@@ -94,7 +120,6 @@ export default function TrackerPage() {
         </div>
       )}
 
-      {/* Table */}
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
         <table className="tracker-table">
           <thead>

@@ -6,9 +6,8 @@ const PLANS = [
   {
     id: "classic",
     name: "Classic Offer",
-    price: "$20",
+    price: "₹1,650",
     period: "/month",
-    inr: "₹1,650",
     desc: "Essential AI scan & optimization tools for job seekers.",
     features: [
       "20 Resume Scans per month",
@@ -21,15 +20,14 @@ const PLANS = [
   {
     id: "pro",
     name: "Pro Plan",
-    price: "$100",
+    price: "₹8,250",
     period: "/month",
-    inr: "₹8,250",
-    desc: "Full AI power with unlimited scans & cover letter generator.",
+    desc: "Full AI power with unlocked Optimizer & Tracker.",
     features: [
-      "Unlimited Resume Scans",
-      "Advanced Sentence-Transformers Matching",
+      "Unlock Resume Optimizer Page",
+      "Unlock Application Tracker Page",
+      "Unlimited Resume Scans & AI Models",
       "AI Cover Letter & Bullet Rewriter",
-      "Application Tracker & Job Matcher",
       "Priority 24/7 Support"
     ],
     popular: true,
@@ -37,9 +35,8 @@ const PLANS = [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: "$200",
+    price: "₹16,500",
     period: "/month",
-    inr: "₹16,500",
     desc: "For teams, agencies & high-volume recruiters.",
     features: [
       "Everything in Pro Plan",
@@ -53,8 +50,8 @@ const PLANS = [
 ];
 
 export default function UpgradeModal() {
-  const { upgradeModalOpen, setUpgradeModalOpen, addToast } = useApp();
-  const [selectedPlan, setSelectedPlan] = useState(PLANS[1]); // Default to Pro ($100)
+  const { upgradeModalOpen, setUpgradeModalOpen, addToast, setIsSubscribed } = useApp();
+  const [selectedPlan, setSelectedPlan] = useState(PLANS[1]); // Default to Pro (₹8,250)
   const [paymentStep, setPaymentStep] = useState("select"); // "select" | "qr"
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes (120 sec)
   const [timerActive, setTimerActive] = useState(false);
@@ -93,10 +90,11 @@ export default function UpgradeModal() {
   }
 
   function handleVerifyPayment() {
+    setIsSubscribed(true);
     close();
     addToast({
-      title: "Payment Submitted!",
-      message: `Your subscription to ${selectedPlan.name} (${selectedPlan.price}/mo) is being verified.`,
+      title: "🎉 Payment Verified & Unlocked!",
+      message: `Your ${selectedPlan.name} (${selectedPlan.price}/mo) subscription is active. Resume Optimizer & Application Tracker are now UNLOCKED!`,
       type: "success"
     });
   }
@@ -119,12 +117,12 @@ export default function UpgradeModal() {
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: "1.15rem" }}>
-                {paymentStep === "qr" ? `Pay for ${selectedPlan.name}` : "Upgrade Your Plan"}
+                {paymentStep === "qr" ? `Pay ${selectedPlan.price} for ${selectedPlan.name}` : "Upgrade Your Subscription Plan"}
               </h3>
               <p className="card-desc" style={{ marginBottom: 0 }}>
                 {paymentStep === "qr"
                   ? `Scan PhonePe QR code to complete your ${selectedPlan.price} payment.`
-                  : "Unlock full AI resume analysis, optimization, and unlimited scans."}
+                  : "Unlock Resume Optimizer & Application Tracker with unlimited AI features."}
               </p>
             </div>
           </div>
@@ -136,7 +134,7 @@ export default function UpgradeModal() {
         {/* Body */}
         <div className="modal-body">
 
-          {/* STEP 1: PLAN SELECTOR */}
+          {/* STEP 1: PLAN SELECTOR IN RUPEES */}
           {paymentStep === "select" && (
             <div className="pricing-grid">
               {PLANS.map((plan) => (
@@ -153,7 +151,6 @@ export default function UpgradeModal() {
                     <span className="plan-price">{plan.price}</span>
                     <span className="plan-period">{plan.period}</span>
                   </div>
-                  <span className="plan-inr">Approx. {plan.inr} / month</span>
 
                   <ul className="plan-features">
                     {plan.features.map((feat, i) => (
@@ -192,7 +189,7 @@ export default function UpgradeModal() {
                 <div style={{ textAlign: "right" }}>
                   <span className="qr-amount">{selectedPlan.price}</span>
                   <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", margin: 0 }}>
-                    ({selectedPlan.inr})
+                    per month
                   </p>
                 </div>
               </div>
@@ -231,7 +228,7 @@ export default function UpgradeModal() {
                   Scan &amp; Pay Using PhonePe / Any UPI App
                 </p>
                 <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", margin: 0 }}>
-                  Open PhonePe, Google Pay, or Paytm → Scan QR → Complete Payment
+                  Open PhonePe, Google Pay, or Paytm → Scan QR → Pay {selectedPlan.price}
                 </p>
               </div>
 
@@ -245,7 +242,7 @@ export default function UpgradeModal() {
                   onClick={handleVerifyPayment}
                   disabled={timeLeft === 0}
                 >
-                  <ShieldCheck size={16} /> I Have Paid {selectedPlan.price}
+                  <ShieldCheck size={16} /> Unlock All Features ({selectedPlan.price})
                 </button>
               </div>
 

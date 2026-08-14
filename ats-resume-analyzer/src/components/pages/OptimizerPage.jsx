@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
-import { Sparkles, CloudUpload, Copy, Download, CheckCircle2, Tag, Lightbulb } from "lucide-react";
+import { Sparkles, CloudUpload, Copy, Download, CheckCircle2, Tag, Lightbulb, Lock, QrCode } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 
 export default function OptimizerPage() {
-  const { addToast } = useApp();
+  const { addToast, isSubscribed, setUpgradeModalOpen } = useApp();
   const [file, setFile] = useState(null);
   const [jd, setJd] = useState("");
   const [optimizing, setOptimizing] = useState(false);
@@ -37,6 +37,34 @@ export default function OptimizerPage() {
   function copy(text) {
     navigator.clipboard.writeText(text);
     addToast({ title: "Copied!", message: "Text copied to clipboard.", type: "success" });
+  }
+
+  if (!isSubscribed) {
+    return (
+      <main className="content page-fade">
+        <div className="page-header">
+          <div>
+            <h2 className="page-title">Resume Optimizer 🔒</h2>
+            <p className="page-subtitle">AI rewrites and enhances your resume content to maximize ATS scores.</p>
+          </div>
+        </div>
+
+        <div className="card locked-card-container">
+          <div className="locked-badge">
+            <Lock size={32} style={{ color: "#ef4444" }} />
+          </div>
+          <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: 8 }}>
+            Resume Optimizer is Locked
+          </h3>
+          <p style={{ color: "var(--text-secondary)", maxWidth: "460px", margin: "0 auto 24px", lineHeight: 1.6 }}>
+            Subscribe to Classic (₹1,650/mo), Pro (₹8,250/mo), or Enterprise (₹16,500/mo) to unlock AI bullet-point rewrites, keyword additions, and ATS optimization.
+          </p>
+          <button className="btn btn-primary btn-lg" onClick={() => setUpgradeModalOpen(true)}>
+            <QrCode size={18} /> Unlock &amp; Pay via PhonePe QR
+          </button>
+        </div>
+      </main>
+    );
   }
 
   return (
