@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+**/node_modules/
+.venv/
+venv/
+ENV/
+
+# Builds & Outputs
+dist/
+**/dist/
+*.pyc
+__pycache__/
+**/__pycache__/
+
+# Logs & Temp
+*.log
+.DS_Store
+.vscode/
+.idea/
+.env
+.env.local

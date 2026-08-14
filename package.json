@@ -1,0 +1,12 @@
+{
+  "name": "iitb-project2-ats-resume-analyzer",
+  "version": "1.0.0",
+  "description": "AI-Powered ATS Resume Analyzer with React Frontend and FastAPI Python NLP/ML Backend",
+  "main": "start_all.py",
+  "scripts": {
+    "start": "python start_all.py",
+    "dev": "python start_all.py",
+    "frontend": "cd ats-resume-analyzer && npm run dev",
+    "backend": "cd backend && python main.py"
+  }
+}
