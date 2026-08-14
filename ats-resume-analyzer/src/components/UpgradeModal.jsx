@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { X, CheckCircle2, QrCode, Clock, ShieldCheck, RefreshCw, Zap } from "lucide-react";
+import { X, CheckCircle2, QrCode, Clock, ShieldCheck, RefreshCw, Zap, PartyPopper } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
 const PLANS = [
   {
     id: "classic",
     name: "Classic Offer",
-    price: "₹1,650",
+    price: "₹20",
     period: "/month",
     desc: "Essential AI scan & optimization tools for job seekers.",
     features: [
@@ -20,7 +20,7 @@ const PLANS = [
   {
     id: "pro",
     name: "Pro Plan",
-    price: "₹8,250",
+    price: "₹100",
     period: "/month",
     desc: "Full AI power with unlocked Optimizer & Tracker.",
     features: [
@@ -35,7 +35,7 @@ const PLANS = [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: "₹16,500",
+    price: "₹300",
     period: "/month",
     desc: "For teams, agencies & high-volume recruiters.",
     features: [
@@ -51,8 +51,8 @@ const PLANS = [
 
 export default function UpgradeModal() {
   const { upgradeModalOpen, setUpgradeModalOpen, addToast, setIsSubscribed } = useApp();
-  const [selectedPlan, setSelectedPlan] = useState(PLANS[1]); // Default to Pro (₹8,250)
-  const [paymentStep, setPaymentStep] = useState("select"); // "select" | "qr"
+  const [selectedPlan, setSelectedPlan] = useState(PLANS[1]); // Default to Pro (₹100)
+  const [paymentStep, setPaymentStep] = useState("select"); // "select" | "qr" | "success"
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes (120 sec)
   const [timerActive, setTimerActive] = useState(false);
 
@@ -91,9 +91,10 @@ export default function UpgradeModal() {
 
   function handleVerifyPayment() {
     setIsSubscribed(true);
-    close();
+    setTimerActive(false);
+    setPaymentStep("success");
     addToast({
-      title: "🎉 Payment Verified & Unlocked!",
+      title: "🎉 Payment Succeeded!",
       message: `Your ${selectedPlan.name} (${selectedPlan.price}/mo) subscription is active. Resume Optimizer & Application Tracker are now UNLOCKED!`,
       type: "success"
     });
@@ -107,20 +108,26 @@ export default function UpgradeModal() {
 
   return (
     <div className={`modal-backdrop ${upgradeModalOpen ? "open" : ""}`} onClick={(e) => e.target === e.currentTarget && close()}>
-      <div className="modal upgrade-modal-card" style={{ maxWidth: paymentStep === "qr" ? "520px" : "900px" }}>
+      <div className="modal upgrade-modal-card" style={{ maxWidth: paymentStep === "select" ? "900px" : "520px" }}>
         
         {/* Header */}
         <div className="modal-header">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div className="stat-icon stat-icon-purple" style={{ width: 36, height: 36 }}>
-              <Zap size={20} />
+              {paymentStep === "success" ? <PartyPopper size={20} style={{ color: "#22c55e" }} /> : <Zap size={20} />}
             </div>
             <div>
               <h3 className="card-title" style={{ fontSize: "1.15rem" }}>
-                {paymentStep === "qr" ? `Pay ${selectedPlan.price} for ${selectedPlan.name}` : "Upgrade Your Subscription Plan"}
+                {paymentStep === "success"
+                  ? "Payment Succeeded! 🎉"
+                  : paymentStep === "qr"
+                  ? `Pay ${selectedPlan.price} for ${selectedPlan.name}`
+                  : "Upgrade Your Subscription Plan"}
               </h3>
               <p className="card-desc" style={{ marginBottom: 0 }}>
-                {paymentStep === "qr"
+                {paymentStep === "success"
+                  ? `Your ${selectedPlan.name} is active. All premium features are unlocked.`
+                  : paymentStep === "qr"
                   ? `Scan PhonePe QR code to complete your ${selectedPlan.price} payment.`
                   : "Unlock Resume Optimizer & Application Tracker with unlimited AI features."}
               </p>
@@ -246,6 +253,41 @@ export default function UpgradeModal() {
                 </button>
               </div>
 
+            </div>
+          )}
+
+          {/* STEP 3: PAYMENT SUCCEEDED SCREEN */}
+          {paymentStep === "success" && (
+            <div className="qr-payment-container" style={{ padding: "20px 10px" }}>
+              <div className="locked-badge" style={{ background: "rgba(34,197,94,0.15)", borderColor: "rgba(34,197,94,0.4)" }}>
+                <CheckCircle2 size={40} style={{ color: "#22c55e" }} />
+              </div>
+
+              <h3 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#22c55e", marginBottom: 4 }}>
+                Payment Succeeded!
+              </h3>
+              <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", maxWidth: "380px", margin: "0 auto 20px", lineHeight: 1.6 }}>
+                Your <strong>{selectedPlan.name} ({selectedPlan.price}/mo)</strong> subscription has been verified successfully.
+              </p>
+
+              <div className="card" style={{ width: "100%", background: "var(--bg-input)", marginBottom: 20, padding: "16px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.88rem", marginBottom: 8 }}>
+                  <span>Status:</span>
+                  <strong style={{ color: "#22c55e" }}>Active &amp; Unlocked</strong>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.88rem", marginBottom: 8 }}>
+                  <span>Unlocked Pages:</span>
+                  <strong>Resume Optimizer &amp; Application Tracker</strong>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.88rem" }}>
+                  <span>Amount Paid:</span>
+                  <strong>{selectedPlan.price}</strong>
+                </div>
+              </div>
+
+              <button className="btn btn-primary btn-lg" style={{ width: "100%" }} onClick={close}>
+                🚀 Start Using Unlocked Features
+              </button>
             </div>
           )}
 
