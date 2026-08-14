@@ -14,6 +14,7 @@ import SettingsPage from "./components/pages/SettingsPage";
 import ToastContainer from "./components/ToastContainer";
 import UploadModal from "./components/UploadModal";
 import ScanOverlay from "./components/ScanOverlay";
+import UpgradeModal from "./components/UpgradeModal";
 import "../../ats-dashboard/styles.css";
 
 const PAGE_MAP = {
@@ -42,6 +43,7 @@ function AppContent() {
       <ToastContainer />
       <UploadModal />
       <ScanOverlay />
+      <UpgradeModal />
     </div>
   );
 }

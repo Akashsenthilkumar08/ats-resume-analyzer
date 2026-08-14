@@ -11,6 +11,7 @@ export function AppProvider({ children }) {
   const [toasts, setToasts] = useState([]);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [scanOverlayOpen, setScanOverlayOpen] = useState(false);
+  const [upgradeModalOpen, setUpgradeModalOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -56,6 +57,8 @@ export function AppProvider({ children }) {
     setUploadModalOpen,
     scanOverlayOpen,
     setScanOverlayOpen,
+    upgradeModalOpen,
+    setUpgradeModalOpen,
     notifOpen,
     setNotifOpen,
     profileOpen,

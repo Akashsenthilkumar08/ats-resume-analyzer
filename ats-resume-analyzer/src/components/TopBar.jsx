@@ -13,6 +13,7 @@ export default function TopBar() {
     setSidebarOpen,
     notifOpen, setNotifOpen,
     profileOpen, setProfileOpen,
+    setUpgradeModalOpen,
     addToast,
   } = useApp();
 
@@ -127,21 +128,27 @@ export default function TopBar() {
               <div>
                 <p className="pp-name">Akash Kumar</p>
                 <p className="pp-email">akash@example.com</p>
-                <span className="pp-badge">Pro Plan</span>
+                <span
+                  className="pp-badge"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => { setUpgradeModalOpen(true); setProfileOpen(false); }}
+                >
+                  Pro Plan (Upgrade)
+                </span>
               </div>
             </div>
             <hr className="panel-divider" />
             <ul className="panel-menu">
               {[
-                { icon: <User size={15} />, label: "My Profile" },
-                { icon: <CreditCard size={15} />, label: "Billing" },
-                { icon: <Settings size={15} />, label: "Preferences" },
-                { icon: <Key size={15} />, label: "API Keys" },
+                { icon: <User size={15} />, label: "My Profile", action: () => addToast({ title: "My Profile", message: "Profile settings opened.", type: "info" }) },
+                { icon: <CreditCard size={15} />, label: "Billing & Upgrade", action: () => setUpgradeModalOpen(true) },
+                { icon: <Settings size={15} />, label: "Preferences", action: () => addToast({ title: "Preferences", message: "Preferences opened.", type: "info" }) },
+                { icon: <Key size={15} />, label: "API Keys", action: () => addToast({ title: "API Keys", message: "API key settings opened.", type: "info" }) },
               ].map((item) => (
                 <li key={item.label}>
                   <button
                     onClick={() => {
-                      addToast({ title: item.label, message: `${item.label} coming soon.`, type: "info" });
+                      item.action();
                       setProfileOpen(false);
                     }}
                   >

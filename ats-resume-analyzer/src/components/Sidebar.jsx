@@ -13,7 +13,7 @@ const ICONS = {
 };
 
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen, activePage, setActivePage, addToast } = useApp();
+  const { sidebarOpen, setSidebarOpen, activePage, setActivePage, setUpgradeModalOpen } = useApp();
 
   function handleNav(id) {
     setActivePage(id);
@@ -104,7 +104,7 @@ export default function Sidebar() {
             </div>
             <button
               className="upgrade-btn"
-              onClick={() => addToast({ title: "Pro Plan", message: "Pro plan coming soon! Stay tuned.", type: "info" })}
+              onClick={() => setUpgradeModalOpen(true)}
             >
               Upgrade
             </button>
