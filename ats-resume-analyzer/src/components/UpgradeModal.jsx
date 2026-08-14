@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, CheckCircle2, QrCode, Clock, ShieldCheck, RefreshCw, Zap, PartyPopper } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import qrCodeImg from "../assets/qr_code.png";
 
 const PLANS = [
   {
@@ -213,7 +214,7 @@ export default function UpgradeModal() {
               <div className="qr-image-wrapper">
                 {timeLeft > 0 ? (
                   <img
-                    src="/qr_code.png"
+                    src={qrCodeImg}
                     alt="PhonePe Payment QR Code"
                     className="qr-code-img"
                   />
