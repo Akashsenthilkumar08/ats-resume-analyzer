@@ -1,19 +1,8 @@
 import { ScanLine, FileText } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
-const SCORE_DETAILS = [
-  { label: "Keywords",   pct: 91 },
-  { label: "Skills",     pct: 78 },
-  { label: "Format",     pct: 85 },
-  { label: "Experience", pct: 82 },
-];
-
-const CIRCUMFERENCE = 2 * Math.PI * 52; // r=52
-
 export default function HeroCard() {
   const { setScanOverlayOpen, setUploadModalOpen } = useApp();
-  const score = 87;
-  const offset = CIRCUMFERENCE - (score / 100) * CIRCUMFERENCE;
 
   return (
     <section className="hero-card">
@@ -46,45 +35,17 @@ export default function HeroCard() {
         </div>
       </div>
 
-      {/* Score Visual */}
+      {/* Video Container (Replaces right side card) */}
       <div className="hero-visual">
-        <div className="hero-score-card">
-          {/* Ring */}
-          <div className="score-ring-wrap">
-            <svg className="score-ring" viewBox="0 0 120 120">
-              <defs>
-                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6C63FF" />
-                  <stop offset="100%" stopColor="#A855F7" />
-                </linearGradient>
-              </defs>
-              <circle className="ring-bg" cx="60" cy="60" r="52" />
-              <circle
-                className="ring-fill"
-                cx="60"
-                cy="60"
-                r="52"
-                strokeDasharray={CIRCUMFERENCE}
-                strokeDashoffset={offset}
-                stroke="url(#ringGrad)"
-              />
-              <text x="60" y="56" textAnchor="middle" className="score-num">{score}</text>
-              <text x="60" y="72" textAnchor="middle" className="score-pct">Match %</text>
-            </svg>
-          </div>
-
-          {/* Bar Details */}
-          <div className="score-details">
-            {SCORE_DETAILS.map((d) => (
-              <div className="score-row" key={d.label}>
-                <span className="score-label">{d.label}</span>
-                <div className="score-bar">
-                  <div className="score-bar-fill" style={{ width: `${d.pct}%` }} />
-                </div>
-                <span>{d.pct}%</span>
-              </div>
-            ))}
-          </div>
+        <div className="hero-video-wrapper">
+          <video
+            src="/video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="hero-video"
+          />
         </div>
       </div>
     </section>
